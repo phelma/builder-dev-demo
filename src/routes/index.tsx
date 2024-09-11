@@ -40,6 +40,7 @@ export default component$(() => {
       model={BUILDER_MODEL}
       content={content.value}
       apiKey={BUILDER_PUBLIC_API_KEY}
+      data={{ foo: 'FOOBAR' }}
     />
   )
 })
