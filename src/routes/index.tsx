@@ -1,25 +1,45 @@
-import { component$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { component$ } from '@builder.io/qwik'
+import { routeLoader$ } from '@builder.io/qwik-city'
+import {
+  Content,
+  fetchOneEntry,
+  getBuilderSearchParams,
+} from '@builder.io/sdk-qwik'
 
-export default component$(() => {
-  return (
-    <>
-      <h1>Hi 👋</h1>
-      <div>
-        Can't wait to see what you build with qwik!
-        <br />
-        Happy coding.
-      </div>
-    </>
-  );
-});
+// Define Builder's public API key and content model.
+export const BUILDER_PUBLIC_API_KEY =
+  '6bfddb3619f64de9ac940f378ec66c88' /* Put your Public API Key here */
+export const BUILDER_MODEL = 'page'
 
-export const head: DocumentHead = {
-  title: "Welcome to Qwik",
-  meta: [
-    {
-      name: "description",
-      content: "Qwik site description",
+// Define a route loader function that loads
+// content from Builder based on the URL.
+export const useBuilderContent = routeLoader$(async ({ url }) => {
+  // Fetch content for the specified model using the API key.
+  const builderContent = await fetchOneEntry({
+    model: BUILDER_MODEL,
+    apiKey: BUILDER_PUBLIC_API_KEY,
+    options: getBuilderSearchParams(url.searchParams),
+    userAttributes: {
+      urlPath: url.pathname,
     },
-  ],
-};
+  })
+
+  // Return the fetched content.
+  return builderContent
+})
+
+// Define a component that renders Builder content
+// using Qwik's Content component.
+export default component$(() => {
+  // Call the useBuilderContent function to get the content.
+  const content = useBuilderContent()
+  // Specify the content model, pass the fetched content,
+  // and provide the Public API Key
+  return (
+    <Content
+      model={BUILDER_MODEL}
+      content={content.value}
+      apiKey={BUILDER_PUBLIC_API_KEY}
+    />
+  )
+})
