@@ -1,15 +1,15 @@
-import { component$ } from '@builder.io/qwik'
-import { routeLoader$ } from '@builder.io/qwik-city'
+import { component$ } from "@builder.io/qwik";
+import { routeLoader$ } from "@builder.io/qwik-city";
 import {
   Content,
   fetchOneEntry,
   getBuilderSearchParams,
-} from '@builder.io/sdk-qwik'
+} from "@builder.io/sdk-qwik";
 
 // Define Builder's public API key and content model.
 export const BUILDER_PUBLIC_API_KEY =
-  '6bfddb3619f64de9ac940f378ec66c88' /* Put your Public API Key here */
-export const BUILDER_MODEL = 'page'
+  "6bfddb3619f64de9ac940f378ec66c88"; /* Put your Public API Key here */
+export const BUILDER_MODEL = "page";
 
 // Define a route loader function that loads
 // content from Builder based on the URL.
@@ -22,17 +22,17 @@ export const useBuilderContent = routeLoader$(async ({ url }) => {
     userAttributes: {
       urlPath: url.pathname,
     },
-  })
+  });
 
   // Return the fetched content.
-  return builderContent
-})
+  return builderContent;
+});
 
 // Define a component that renders Builder content
 // using Qwik's Content component.
 export default component$(() => {
   // Call the useBuilderContent function to get the content.
-  const content = useBuilderContent()
+  const content = useBuilderContent();
   // Specify the content model, pass the fetched content,
   // and provide the Public API Key
   return (
@@ -40,7 +40,6 @@ export default component$(() => {
       model={BUILDER_MODEL}
       content={content.value}
       apiKey={BUILDER_PUBLIC_API_KEY}
-      data={{ foo: 'FOOBAR' }}
     />
-  )
-})
+  );
+});
